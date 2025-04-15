@@ -3,6 +3,11 @@ provider "google" {
  region  = var.region
  credentials = var.credentials
 }
+locals{
+  dxclearning = "mgcp"
+  dxclearning1="python"
+}
+
 resource "google_compute_network" "my_vpc_network" {
  name                    = var.vpc-network
 }
@@ -18,11 +23,14 @@ resource "google_compute_instance" "default" {
  name         = var.instance_type
  machine_type = var.machine_type
  zone         = var.instance_zone
+ tags = [local.dxclearning,local.dxclearning1]
+
  boot_disk {
    initialize_params {
      image = var.boot_disk_image
    }
  }
+ 
  network_interface {
    network    = google_compute_network.my_vpc_network.id
    subnetwork = google_compute_subnetwork.my_subnet.id
@@ -30,4 +38,6 @@ resource "google_compute_instance" "default" {
      
    }
  }
+ 
+ 
 }
