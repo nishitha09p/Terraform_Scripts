@@ -1,1 +1,1 @@
-This are my terraform scripts.
+My terraform scripts.
