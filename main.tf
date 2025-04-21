@@ -1,46 +1,45 @@
 provider "google" {
-  project     = var.project_ID
-  region      = var.region
-  credentials = var.credentials
+  project     = "myprojectnishitha13593"
+  region      = "us-central1"
+  credentials = "keys.json"
 }
 
-locals {
-  dxclearning = "mgcp"
-  dxclearning1 = "python"
+resource "google_compute_network" "jio_network" {
+  name                    = "jio-network"
+}
+resource "google_compute_network" "airtel_network" {
+  name                    = "airtel-network"
+}
+data "google_compute_network" "datasource_airtel_network" {
+  name = "airtel-network"
 }
 
-resource "google_compute_network" "my_vpc_network" {
-  name = var.vpc-network
+resource "google_compute_subnetwork" "jio_subnet" {
+  name            = "jio-subnet"
+  ip_cidr_range = "10.2.0.0/24"
+  network       = google_compute_network.jio_network.id  
+  region          = "us-central1"
 }
 
-resource "google_compute_subnetwork" "my_subnet" {
-  name           = var.my_subnet
-  ip_cidr_range  = var.subnet_CIDR
-  network        = google_compute_network.my_vpc_network.id
-  region         = "us-central1"
-}
-
-resource "google_compute_instance" "default" {
-  name         = var.instance_type
-  machine_type = var.machine_type
-  zone         = var.instance_zone
-  tags         = [local.dxclearning, local.dxclearning1]
-
+resource "google_compute_instance" "my_instance" {
+  name         = "my-instance"
+  machine_type = "e2-micro"
+  zone         = "us-central1-c"
   boot_disk {
     initialize_params {
-      image = var.boot_disk_image
+      image = "debian-cloud/debian-11"
     }
   }
-
   network_interface {
-    network    = google_compute_network.my_vpc_network.id
-    subnetwork = google_compute_subnetwork.my_subnet.id
-    access_config {
-      
-    }
+  
+    subnetwork = google_compute_subnetwork.jio_subnet.id
+    access_config {}
   }
-}
+  network_interface {
+  
+    network = data.google_compute_network.datasource_airtel_network.id
+    access_config {}
+  }
 
-output "public_ip" {
-  value       = google_compute_instance.default.network_interface.0.access_config.0.nat_ip
+
 }
