@@ -11,7 +11,7 @@ resource "google_compute_network" "airtel_network" {
   name                    = "airtel-network"
 }
 data "google_compute_network" "datasource_airtel_network" {
-  name = "airtel-network"
+ name = google_compute_network.airtel_network.name
 }
 
 resource "google_compute_subnetwork" "jio_subnet" {
