@@ -25,7 +25,11 @@ resource "google_compute_instance" "my_instance_east" {
       
     }
   }
+  lifecycle{
+    prevent_destroy = true
+  }
 }
+
   
 
 resource "google_compute_instance" "my_instance" {
