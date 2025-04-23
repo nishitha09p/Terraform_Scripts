@@ -1,22 +1,22 @@
 provider "google" {
-  project = "myprojectnishitha13593"  
-  region  = "us-central1"     
-  credentials = "c:/terraform/data/count/keys.json"
+  project = var.project  
+  region  = var.region
+  credentials = var.credentials
 }
 provider "google" {
-    project = "myprojectnishitha13593"
-    alias = "east"
-    region = "us-east1"
-    credentials = "c:/terraform/data/count/keys.json"
+    project = var.project
+    alias = var.alias
+    region = "var.region 
+    credentials = var.credentialas 
 }
 resource "google_compute_instance" "my_instance_east" {
-  provider   = google.east
-  name         = "dxcpune-instance"
-  machine_type = "e2-micro"
-  zone = "us-east1-b" 
+  provider   = var.provider 
+  name         = var.name 
+  machine_type = var.machine_type 
+  zone = var. zone  
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11" 
+      image = var.image 
     }
   }
   network_interface {
@@ -33,13 +33,13 @@ resource "google_compute_instance" "my_instance_east" {
   
 
 resource "google_compute_instance" "my_instance" {
-  name         = "dxcchennai-instance"
-  machine_type = "e2-micro" 
-  zone         = "us-central1-a" 
+  name         = var.insatnce_name 
+  machine_type = var.machine_type 
+  zone         = var.zone 
   
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11" 
+      image = var.image  
     }
   }
   network_interface {
