@@ -1,31 +1,48 @@
 provider "google" {
-  project     = "myprojectnishitha13593"
-  region      = "us-central1"
+  project = "myprojectnishitha13593"  
+  region  = "us-central1"     
   credentials = "c:/terraform/data/count/keys.json"
 }
-
-resource "google_compute_instance" "my_instance" {
-  for_each = {
-    prod = "e2-micro"
-    dev  = "e2-small"
-  }
-
-  name         = "india-${each.key}"
-  machine_type = each.value
-  zone         = "us-central1-b"
-
+provider "google" {
+    project = "myprojectnishitha13593"
+    alias = "east"
+    region = "us-east1"
+    credentials = "c:/terraform/data/count/keys.json"
+}
+resource "google_compute_instance" "my_instance_east" {
+  provider   = google.east
+  name         = "dxcpune-instance"
+  machine_type = "e2-micro"
+  zone = "us-east1-b" 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "debian-cloud/debian-11" 
     }
   }
- network_interface {
-    network      = "default"
-    access_config {} # Request a public IP
+  network_interface {
+    network = "default" 
+    access_config {
+      
+    }
   }
 }
-
-
-
   
+
+resource "google_compute_instance" "my_instance" {
+  name         = "dxcchennai-instance"
+  machine_type = "e2-micro" 
+  zone         = "us-central1-a" 
+  
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11" 
+    }
+  }
+  network_interface {
+    network = "default" 
+    access_config {
+      
+    }
+  }
+}
 
